@@ -1,0 +1,6 @@
+Airflow/.idea
+Airflow/.venv
+Airflow/clickhouse_data
+Airflow/logs
+Airflow/plugins
+Airflow/SQL
