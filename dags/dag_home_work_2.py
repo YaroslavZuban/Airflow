@@ -2,6 +2,7 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.utils.dates import days_ago
+from datetime import datetime, timedelta
 
 from main import extract_date, transform_data, upload_data, check_and_delete_data, URL, CH_CLIENT
 
