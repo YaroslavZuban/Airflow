@@ -15,8 +15,6 @@ USER = os.getenv('USER')
 PASSWORD = os.getenv('PASSWORD')
 DATABASE = os.getenv('DATABASE')
 
-today = date.today()
-
 URL = f'https://v6.exchangerate-api.com/v6/{KEY_API}/latest/RUB'
 
 CH_CLIENT = Client(
@@ -34,7 +32,7 @@ def extract_date(url, s_file):
         tmp_file.write(request.text)
 
 
-def transform_data(s_file, csv_file):
+def transform_data(s_file, csv_file, today):
     rows = list()
 
     with open(s_file, 'r') as file:
@@ -66,7 +64,7 @@ def upload_data(csv_file, table_name, client):
     client.execute(f'INSERT INTO {table_name} VALUES ', data_frame.to_dict('records'))
 
 
-def check_and_delete_data(table_name, client):
+def check_and_delete_data(table_name, client, today):
     query_check = f"SELECT COUNT(*) FROM {table_name} WHERE date='{today}'"
 
     result = client.execute(query_check)
@@ -76,14 +74,14 @@ def check_and_delete_data(table_name, client):
         client.execute(query_delete)
 
 
-extract_date(URL, 'currency.json')
+extract_date(URL, 'home_work_2/currency.json')
 
-transform_data('currency.json', 'currency.csv')
+transform_data('home_work_2/currency.json', 'currency.csv')
 
 check_and_delete_data(table_name='exchange_rate', client=CH_CLIENT)
 
 upload_data(
-    csv_file='currency.csv',
+    csv_file='home_work_2/currency.csv',
     table_name='exchange_rate',
     client=CH_CLIENT
 )

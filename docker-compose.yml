@@ -20,13 +20,15 @@ services:
       - AIRFLOW__WEBSERVER__USER_CREATE=True
       - AIRFLOW__WEBSERVER__USER_LOGIN=airflow
       - AIRFLOW__WEBSERVER__USER_PASSWORD=airflow
+      - _PIP_ADDITIONAL_PACKAGES=clickhouse-driver
     volumes:
       - ./dags:/opt/airflow/dags
       - ./logs:/opt/airflow/logs
       - ./plugins:/opt/airflow/plugins
+      - ./requirements.txt:/requirements.txt
     ports:
       - "8080:8080"
-    entrypoint: /bin/bash -c "airflow db init && airflow users create --username airflow --password airflow --firstname Admin --lastname User --role Admin --email admin@example.com && airflow webserver & airflow scheduler"
+    entrypoint: /bin/bash -c "pip install -r /requirements.txt && airflow db init && airflow users create --username airflow --password airflow --firstname Admin --lastname User --role Admin --email admin@example.com && airflow webserver & airflow scheduler"
 
   clickhouse:
     image: clickhouse/clickhouse-server:latest
